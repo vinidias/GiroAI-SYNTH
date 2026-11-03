@@ -32,8 +32,29 @@ the truth, not just held-out data.
 | Signal | How it is generated | Recovered by | Result |
 |---|---|---|---|
 | Price elasticity | `qty = k * (price/full_price) ** (-epsilon)`, epsilon per SKU | within-SKU OLS | **Pearson 0.995**, ε pooled 1.20 |
-| Churn | monthly hazard, leading indicators in RFM | LightGBM on RFM | **AUC 0.988**, rate 12.9% |
+| Churn | latent health decline drives order rate, basket width and hazard | LightGBM, **temporal split** | **AUC 0.675**, rate 15.9% |
 | SKU affinity | 8-dim latent vectors, sigmoid | implicit ALS | **recall@10 0.246** |
+
+### A note on the churn metric
+
+An earlier release reported AUC 0.988 for churn. That number was **leakage**:
+recency was computed at the end of the dataset, so for any customer who had
+already churned it grew without bound and the classifier simply read the clock.
+A temporal split (features up to month t-6, label after t) gave AUC 0.538 - the
+hazard was drawn independently of behaviour, so there was nothing to learn.
+
+The generator now ties the hazard to a latent health decline that also drives
+order rate and basket width, so the RFM features a model observes *precede* the
+label. Measured with the same temporal split:
+
+| Version | AUC | Churn rate |
+|---|---|---|
+| Original (hazard independent of behaviour) | 0.538 | 12.9% |
+| Current (health decline drives behaviour) | **0.675** | 15.9% |
+
+The **0.675 is the honest number** and the one to compare against any external
+dataset. Always split temporally when evaluating churn - a random split measures
+how well the model memorises the past, not how well it predicts the future.
 
 ## Causal chain (the macro coupling)
 

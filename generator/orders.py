@@ -36,6 +36,10 @@ def generate_orders(cfg: Config, clientes, produtos, monthly_prices,
     churn_month = churn_gt["churn_month_index"].to_numpy()
     phase = propensity_gt["seasonality_phase"].to_numpy()
     amp = propensity_gt["seasonality_amplitude"].to_numpy()
+    # Latent health decline drives observable deterioration before churn:
+    # as health falls, order rate and SKU variety fall too, so the RFM
+    # features a model sees actually precede the label.
+    health_slope = churn_gt["health_slope"].to_numpy() if "health_slope" in churn_gt else np.zeros(n_c)
 
     table_factor = clientes["tabela_preco_id"].map(
         dict(zip(price_tables["tabela_preco_id"], price_tables["fator_sobre_lista"]))
@@ -56,7 +60,11 @@ def generate_orders(cfg: Config, clientes, produtos, monthly_prices,
             continue
         season = 1 + amp * np.sin(2 * np.pi * (mi / 12) + phase)
         active = (churn_month < 0) | (mi <= churn_month)
-        lam = np.where(active, propensity * season, 0.0)
+        # health declines linearly: 1.0 at month 0, down to (1 - slope*months)
+        health = np.clip(1.0 - health_slope * mi, 0.05, 1.0)
+        # order propensity scales with health, so revenue/frequency fall
+        # observably in the months before churn
+        lam = np.where(active, propensity * season * health, 0.0)
         n_orders = rng.poisson(np.clip(lam, 0, None))
         total_orders = int(n_orders.sum())
         if total_orders == 0:
@@ -78,8 +86,11 @@ def generate_orders(cfg: Config, clientes, produtos, monthly_prices,
         for oi in range(total_orders):
             ci = cust_idx[oi]
             k = n_items[oi]
-            # affinity dominates popularity so latent structure is the main signal
-            w = (affinity[ci] ** 2) * np.sqrt(pop)
+            # affinity dominates popularity so latent structure is the main signal.
+            # As health declines the customer narrows their basket: raise the
+            # affinity exponent, concentrating purchases on fewer SKUs.
+            aff_power = 2.0 + (1.0 - health[ci]) * 4.0
+            w = (affinity[ci] ** aff_power) * np.sqrt(pop)
             w = np.clip(w, 1e-12, None)
             w = w / w.sum()
             chosen_skus[pos:pos + k] = rng.choice(n_p, size=k, replace=False, p=w)

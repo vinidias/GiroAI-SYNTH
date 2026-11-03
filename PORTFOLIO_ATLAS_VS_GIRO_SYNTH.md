@@ -112,8 +112,15 @@ E a validação **contra a verdade** (não contra held-out):
 | Sinal | Métrica | Valor |
 |---|---|---|
 | Elasticidade | Pearson(verdade, estimado) | **0.995** |
-| Churn | AUC (features RFM) | **0.988** |
+| Churn | AUC (split temporal, sem vazamento) | **0.675** |
 | Recomendação | ALS recall@10 | **0.246** |
+
+> **Sobre o churn.** Uma versão anterior reportava AUC 0.988. Era vazamento:
+> a recência era calculada no fim do dataset, então para quem já tinha saído ela
+> crescia sem limite e o classificador só lia o relógio. Com split temporal
+> (features até t-6, label depois de t) o número honesto é 0.675 - e o gerador
+> precisou ser reescrito para que a deterioração comportamental precedesse o
+> label. O episódio virou uma seção do README do dataset.
 
 ---
 

@@ -36,7 +36,7 @@ We publish measured results so users know the dataset works as advertised:
 | Task | Metric | Value |
 |---|---|---|
 | Price elasticity | Pearson(true, estimated) | 0.995 |
-| Churn | LightGBM ROC-AUC | 0.988 |
+| Churn | LightGBM ROC-AUC (temporal split) | 0.675 |
 | Recommendation | ALS recall@10 | 0.246 |
 
 ## Intended uses

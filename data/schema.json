@@ -4,8 +4,8 @@
   "scale": {
     "customers": 5000,
     "skus": 500,
-    "orders": 475433,
-    "items": 2138702
+    "orders": 371690,
+    "items": 1669880
   },
   "tables": {
     "operational": [
