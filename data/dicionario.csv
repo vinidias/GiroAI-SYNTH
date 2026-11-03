@@ -1,0 +1,15 @@
+tabela,coluna,tipo,chave,descricao
+clientes,cliente_id,str,PK,Unique customer id
+clientes,segmento,str,,One of 6 wholesale segments
+clientes,tabela_preco_id,str,FK tabelas_preco,Price table assigned
+produtos,produto_id,str,PK,Unique SKU id
+produtos,categoria,str,,One of 12 food categories
+produtos,elasticidade_verdadeira,float,ground truth,True price elasticity used to generate demand
+pedidos,pedido_id,str,PK,Unique order id
+pedidos,status_pedido,str,,FATURADO | CANCELADO | SEM_EXPEDICAO | BLOQUEADO_CREDITO
+itens_pedido,item_pedido_id,str,PK,Unique line id
+itens_pedido,preco_unitario_brl,float,,Effective unit price in BRL
+gt_elasticity,epsilon,float,ground truth,Category-level true elasticity
+gt_churn,churn_month_index,int,ground truth,"-1 = active, else month index of churn"
+gt_affinity,affinity,float,ground truth,"Latent customer-SKU affinity in [0,1]"
+gt_propensity,base_order_rate,float,ground truth,Baseline orders per month

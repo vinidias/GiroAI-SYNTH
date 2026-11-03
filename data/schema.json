@@ -1,0 +1,38 @@
+{
+  "version": "0.1.0",
+  "seed": 42,
+  "scale": {
+    "customers": 5000,
+    "skus": 500,
+    "orders": 475433,
+    "items": 2138702
+  },
+  "tables": {
+    "operational": [
+      "clientes",
+      "produtos",
+      "tabelas_preco",
+      "vendedores",
+      "pedidos",
+      "itens_pedido",
+      "precos_produto"
+    ],
+    "ground_truth": [
+      "gt_elasticity",
+      "gt_churn",
+      "gt_affinity",
+      "gt_propensity",
+      "gt_demand"
+    ],
+    "macro": [
+      "cepea_monthly.csv"
+    ]
+  },
+  "anomalies": {
+    "duplicate_orders": 50,
+    "bad_customer_orders": 3,
+    "duplicate_items": 60,
+    "junk_numeric": 20,
+    "capitalization_drift": 10
+  }
+}
