@@ -7,3 +7,8 @@ data/operational/
 data/ground_truth/
 data/macro/
 gen.log
+charts.log
+kaleido.log
+_out/
+_*.py
+giro-synth-v*.zip

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>GIRO-SYNTH - Visual report</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background: #f7f8fa; color: #222; }
+  header { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; padding: 48px 32px; text-align: center; }
+  header h1 { margin: 0 0 8px; font-size: 32px; }
+  header p { margin: 0; opacity: 0.9; }
+  main { max-width: 1200px; margin: 32px auto; padding: 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 24px; }
+  .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .card h3 { margin: 0 0 6px; font-size: 18px; color: #1b5e20; }
+  .card p { margin: 0 0 14px; color: #555; font-size: 14px; }
+  .card img { width: 100%; border-radius: 8px; }
+  footer { text-align: center; padding: 32px; color: #666; font-size: 13px; }
+  a { color: #2e7d32; }
+</style>
+</head>
+<body>
+<header>
+  <h1>GIRO-SYNTH - Visual report</h1>
+  <p>What a documented ground truth reveals about a modelling pipeline</p>
+</header>
+<main>
+  <div class="grid">
+
+    <div class="card">
+      <h3>Benchmark: Atlas vs GIRO-SYNTH</h3>
+      <p>Same pipeline, two datasets. The gap is the signal the Atlas does not contain.</p>
+      <img src="charts/01_benchmark.png" alt="Benchmark">
+    </div>
+
+    <div class="card">
+      <h3>Elasticity recovery</h3>
+      <p>True epsilon vs estimated epsilon per SKU (within SKU x month). Pearson r = 0.995.</p>
+      <img src="charts/02_elasticity_recovery.png" alt="Elasticity recovery">
+    </div>
+
+    <div class="card">
+      <h3>Churn separability</h3>
+      <p>Recency and frequency distributions split cleanly between retained and churned customers.</p>
+      <img src="charts/03_churn_separability.png" alt="Churn">
+    </div>
+
+    <div class="card">
+      <h3>Customer segments</h3>
+      <p>KMeans (k=4) over RFM features, silhouette 0.56.</p>
+      <img src="charts/04_segments.png" alt="Segments">
+    </div>
+
+    <div class="card">
+      <h3>Causal price chain</h3>
+      <p>List prices follow real CEPEA commodity indices for each category.</p>
+      <img src="charts/05_causal_prices.png" alt="Causal prices">
+    </div>
+
+    <div class="card">
+      <h3>Learned SKU similarity</h3>
+      <p>Item-item similarity from ALS latent factors, top 30 SKUs by volume.</p>
+      <img src="charts/06_recommender_heatmap.png" alt="Recommender">
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    <h3>Interactive benchmark</h3>
+    <p>Open the Plotly chart in a new tab: <a href="charts/07_benchmark_interactive.html">07_benchmark_interactive.html</a></p>
+  </div>
+</main>
+<footer>
+  Dataset: <a href="https://github.com/vinidias/GiroAI-SYNTH">GiroAI-SYNTH</a> -
+  Pipeline: <a href="https://github.com/vinidias/GiroAI-B2B-SKU-recommendation-price-elasticity-churn-and-segmentation">Giro AI</a> -
+  License: CC BY 4.0
+</footer>
+</body>
+</html>
